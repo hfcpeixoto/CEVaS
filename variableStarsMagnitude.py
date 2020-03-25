@@ -1,16 +1,15 @@
 from CEVaS import CEAAL
-from tkinter import *
-from tkinter.filedialog import askopenfilename
+import tkinter as tk
 from PIL import Image, ImageTk
 
 
-class VariableStarsApp(Frame):
+class VariableStarsApp(tk.Frame):
     def initSelectedImage(self):
         if self.selectedImageFrame == "":
-            self.selectedImageFrame = Frame(
+            self.selectedImageFrame = tk.Frame(
                 self, width=self.resizedImg.width(), height=self.resizedImg.height()
             )
-            self.selectedImageCanvas = Canvas(
+            self.selectedImageCanvas = tk.Canvas(
                 self.selectedImageFrame,
                 width=self.resizedImg.width(),
                 height=self.resizedImg.height(),
@@ -20,7 +19,7 @@ class VariableStarsApp(Frame):
             self.selectedImageCanvas.delete(self.selectedImageId)
 
         self.selectedImageId = self.selectedImageCanvas.create_image(
-            0, 0, image=self.resizedImg, anchor=NW
+            0, 0, image=self.resizedImg, anchor=tk.NW
         )
         self.selectedImageCanvas.grid(row=0, column=0)
         self.selectedImageFrame.configure(
@@ -73,22 +72,22 @@ class VariableStarsApp(Frame):
 
     def initStarImage(self, star):
         if self.img != "":
-            self.top = Toplevel()
+            self.top = tk.Toplevel()
             # Open maximized window
             self.top.state("zoomed")
             self.top.title("Pick the star")
 
-            self.canvas1 = Canvas(
+            self.canvas1 = tk.Canvas(
                 self.top,
                 width=self.img.width(),
                 height=self.img.height(),
                 scrollregion=(0, 0, self.img.width(), self.img.height()),
             )
-            self.hbar = Scrollbar(self.top, orient=HORIZONTAL)
-            self.hbar.pack(side=BOTTOM, fill=X)
+            self.hbar = tk.Scrollbar(self.top, orient=tk.HORIZONTAL)
+            self.hbar.pack(side=tk.BOTTOM, fill=tk.X)
             self.hbar.config(command=self.canvas1.xview)
-            self.vbar = Scrollbar(self.top, orient=VERTICAL)
-            self.vbar.pack(side=RIGHT, fill=Y)
+            self.vbar = tk.Scrollbar(self.top, orient=tk.VERTICAL)
+            self.vbar.pack(side=tk.RIGHT, fill=tk.Y)
             self.vbar.config(command=self.canvas1.yview)
             self.canvas1.config(
                 xscrollcommand=self.hbar.set, yscrollcommand=self.vbar.set
@@ -108,81 +107,81 @@ class VariableStarsApp(Frame):
                 "<Down>", lambda event: self.canvas1.yview_scroll(1, "units")
             )
             self.canvas1.focus_set()
-            self.canvas1.pack(side=LEFT, expand=True, fill=BOTH)
+            self.canvas1.pack(side=tk.LEFT, expand=True, fill=tk.BOTH)
 
     def initApp(self):
-        self.tableFrame = Frame(self)
-        self.tableFrame.pack(side=TOP, anchor=NW)
+        self.tableFrame = tk.Frame(self)
+        self.tableFrame.pack(side=tk.TOP, anchor=tk.NW)
 
-        starsHeaderLbl = Label(self.tableFrame, text="Stars")
+        starsHeaderLbl = tk.Label(self.tableFrame, text="Stars")
         starsHeaderLbl.grid(row=0, column=0)
 
-        starsHeaderLbl = Label(self.tableFrame, text="x-Pixel")
+        starsHeaderLbl = tk.Label(self.tableFrame, text="x-Pixel")
         starsHeaderLbl.grid(row=0, column=1)
 
-        starsHeaderLbl = Label(self.tableFrame, text="y-Pixel")
+        starsHeaderLbl = tk.Label(self.tableFrame, text="y-Pixel")
         starsHeaderLbl.grid(row=0, column=2)
 
-        starsHeaderLbl = Label(self.tableFrame, text="Magnitude")
+        starsHeaderLbl = tk.Label(self.tableFrame, text="Magnitude")
         starsHeaderLbl.grid(row=0, column=3)
 
-        starsHeaderLbl = Label(self.tableFrame, text="Pick from image")
+        starsHeaderLbl = tk.Label(self.tableFrame, text="Pick from image")
         starsHeaderLbl.grid(row=0, column=4)
 
         # Comparison star 1
-        star1Lbl = Label(self.tableFrame, text="Comp star 1")
+        star1Lbl = tk.Label(self.tableFrame, text="Comp star 1")
         star1Lbl.grid(row=1, column=0)
 
-        star1PixelxLbl = Label(self.tableFrame, textvariable=self.star1.x)
+        star1PixelxLbl = tk.Label(self.tableFrame, textvariable=self.star1.x)
         star1PixelxLbl.grid(row=1, column=1)
 
-        star1PixelyLbl = Label(self.tableFrame, textvariable=self.star1.y)
+        star1PixelyLbl = tk.Label(self.tableFrame, textvariable=self.star1.y)
         star1PixelyLbl.grid(row=1, column=2)
 
-        self.star1MagTxt = Entry(self.tableFrame, width=4, text="")
+        self.star1MagTxt = tk.Entry(self.tableFrame, width=4, text="")
         self.star1MagTxt.grid(row=1, column=3)
         self.star1MagTxt.insert(0, "0.0")
 
-        selectStar1Btn = Button(
+        selectStar1Btn = tk.Button(
             self.tableFrame, text="Pick", command=lambda: self.initStarImage(self.star1)
         )
         selectStar1Btn.grid(row=1, column=4)
 
         # Comparison star 2
-        star2Lbl = Label(self.tableFrame, text="Comp star 2")
+        star2Lbl = tk.Label(self.tableFrame, text="Comp star 2")
         star2Lbl.grid(row=2, column=0)
 
-        star2PixelxLbl = Label(self.tableFrame, textvariable=self.star2.x)
+        star2PixelxLbl = tk.Label(self.tableFrame, textvariable=self.star2.x)
         star2PixelxLbl.grid(row=2, column=1)
 
-        star2PixelyLbl = Label(self.tableFrame, textvariable=self.star2.y)
+        star2PixelyLbl = tk.Label(self.tableFrame, textvariable=self.star2.y)
         star2PixelyLbl.grid(row=2, column=2)
 
-        self.star2MagTxt = Entry(self.tableFrame, width=4, text="")
+        self.star2MagTxt = tk.Entry(self.tableFrame, width=4, text="")
         self.star2MagTxt.grid(row=2, column=3)
         self.star2MagTxt.insert(0, "0.0")
 
-        selectStar2Btn = Button(
+        selectStar2Btn = tk.Button(
             self.tableFrame, text="Pick", command=lambda: self.initStarImage(self.star2)
         )
         selectStar2Btn.grid(row=2, column=4)
 
         # Variable star
-        varStarLbl = Label(self.tableFrame, text="Variable star")
+        varStarLbl = tk.Label(self.tableFrame, text="Variable star")
         varStarLbl.grid(row=3, column=0)
 
-        varStarPixelxLbl = Label(self.tableFrame, textvariable=self.varStar.x)
+        varStarPixelxLbl = tk.Label(self.tableFrame, textvariable=self.varStar.x)
         varStarPixelxLbl.grid(row=3, column=1)
 
-        star2PixelyLbl = Label(self.tableFrame, textvariable=self.varStar.y)
+        star2PixelyLbl = tk.Label(self.tableFrame, textvariable=self.varStar.y)
         star2PixelyLbl.grid(row=3, column=2)
 
-        self.varStarMagTxt = Label(
+        self.varStarMagTxt = tk.Label(
             self.tableFrame, width=4, textvariable=self.varStar.magnitude
         )
         self.varStarMagTxt.grid(row=3, column=3)
 
-        selectVarStarBtn = Button(
+        selectVarStarBtn = tk.Button(
             self.tableFrame,
             text="Pick",
             command=lambda: self.initStarImage(self.varStar),
@@ -190,7 +189,7 @@ class VariableStarsApp(Frame):
         selectVarStarBtn.grid(row=3, column=4)
 
         # Select image button
-        selectImageBtn = Button(
+        selectImageBtn = tk.Button(
             self.tableFrame,
             text="Select image",
             width=10,
@@ -200,7 +199,7 @@ class VariableStarsApp(Frame):
         selectImageBtn.grid(row=0, column=5, rowspan=3)
 
         # Select image button
-        evalMagnitudeBtn = Button(
+        evalMagnitudeBtn = tk.Button(
             self.tableFrame,
             text="Evaluate",
             width=10,
@@ -210,8 +209,8 @@ class VariableStarsApp(Frame):
         evalMagnitudeBtn.grid(row=3, column=5, rowspan=2)
 
         # Selected image status
-        statusSelectedImageLbl = Label(
-            self.tableFrame, anchor=W, justify=LEFT, textvariable=self.filename
+        statusSelectedImageLbl = tk.Label(
+            self.tableFrame, anchor=tk.W, justify=tk.LEFT, textvariable=self.filename
         )
         statusSelectedImageLbl.grid(row=4, column=0, columnspan=4)
 
@@ -236,7 +235,7 @@ class VariableStarsApp(Frame):
 
     def selectImage(self):
         self.filename.set(
-            askopenfilename(
+            tk.filedialog.askopenfilename(
                 parent=self.parent, initialdir="./", title="Choose an image."
             )
         )
@@ -258,12 +257,12 @@ class VariableStarsApp(Frame):
         self.pack()
 
     def __init__(self, parent):
-        Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent)
         parent.title("Variable star's magnitude evaluator")
         self.parent = parent
         self.selectedImageFrame = ""
 
-        self.filename = StringVar()
+        self.filename = tk.StringVar()
         self.filename.set("No image selected.")
         self.img = ""
         self.selectedImageId = 0
@@ -278,8 +277,6 @@ class VariableStarsApp(Frame):
 
 
 if __name__ == "__main__":
-    root = Tk()
-
+    root = tk.Tk()
     app = VariableStarsApp(root)
-
     root.mainloop()
