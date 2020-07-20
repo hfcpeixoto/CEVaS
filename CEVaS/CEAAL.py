@@ -6,10 +6,10 @@ from PIL import Image, ImageTk
 class Star:
     def __init__(self, colour=(0, 0, 0)):
         self.imageCross = list()
-        self.x = StringVar()
-        self.x.set("0")
-        self.y = StringVar()
-        self.y.set("0")
+        self.xPick = StringVar()
+        self.xPick.set("0")
+        self.yPick = StringVar()
+        self.yPick.set("0")
         self.magnitude = StringVar()
         self.magnitude.set("0")
         self.colour = colour

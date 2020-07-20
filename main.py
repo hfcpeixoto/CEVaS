@@ -36,14 +36,14 @@ class VariableStarsApp(tk.Frame):
             for i in star.imageCross:
                 self.selectedImageCanvas.delete(i)
 
-        star.x.set(int(self.canvas1.canvasx(event.x)))
-        star.y.set(int(self.canvas1.canvasy(event.y)))
+        star.xPick.set(int(self.canvas1.canvasx(event.x)))
+        star.yPick.set(int(self.canvas1.canvasy(event.y)))
         self.top.destroy()
         self.top.update()
 
         # Mapping click poosition from full image to resized
-        x = int(int(star.x.get()) * self.resizedImg.width() / self.pilImg.width)
-        y = int(int(star.y.get()) * self.resizedImg.height() / self.pilImg.height)
+        x = int(int(star.xPick.get()) * self.resizedImg.width() / self.pilImg.width)
+        y = int(int(star.yPick.get()) * self.resizedImg.height() / self.pilImg.height)
 
         colour = star.getHexColour()
         star.imageCross.append(
@@ -132,10 +132,10 @@ class VariableStarsApp(tk.Frame):
         star1Lbl = tk.Label(self.tableFrame, text="Comp star 1")
         star1Lbl.grid(row=1, column=0)
 
-        star1PixelxLbl = tk.Label(self.tableFrame, textvariable=self.star1.x)
+        star1PixelxLbl = tk.Label(self.tableFrame, textvariable=self.star1.xPick)
         star1PixelxLbl.grid(row=1, column=1)
 
-        star1PixelyLbl = tk.Label(self.tableFrame, textvariable=self.star1.y)
+        star1PixelyLbl = tk.Label(self.tableFrame, textvariable=self.star1.yPick)
         star1PixelyLbl.grid(row=1, column=2)
 
         self.star1MagTxt = tk.Entry(self.tableFrame, width=4, text="")
@@ -151,10 +151,10 @@ class VariableStarsApp(tk.Frame):
         star2Lbl = tk.Label(self.tableFrame, text="Comp star 2")
         star2Lbl.grid(row=2, column=0)
 
-        star2PixelxLbl = tk.Label(self.tableFrame, textvariable=self.star2.x)
+        star2PixelxLbl = tk.Label(self.tableFrame, textvariable=self.star2.xPick)
         star2PixelxLbl.grid(row=2, column=1)
 
-        star2PixelyLbl = tk.Label(self.tableFrame, textvariable=self.star2.y)
+        star2PixelyLbl = tk.Label(self.tableFrame, textvariable=self.star2.yPick)
         star2PixelyLbl.grid(row=2, column=2)
 
         self.star2MagTxt = tk.Entry(self.tableFrame, width=4, text="")
@@ -170,10 +170,10 @@ class VariableStarsApp(tk.Frame):
         varStarLbl = tk.Label(self.tableFrame, text="Variable star")
         varStarLbl.grid(row=3, column=0)
 
-        varStarPixelxLbl = tk.Label(self.tableFrame, textvariable=self.varStar.x)
+        varStarPixelxLbl = tk.Label(self.tableFrame, textvariable=self.varStar.xPick)
         varStarPixelxLbl.grid(row=3, column=1)
 
-        star2PixelyLbl = tk.Label(self.tableFrame, textvariable=self.varStar.y)
+        star2PixelyLbl = tk.Label(self.tableFrame, textvariable=self.varStar.yPick)
         star2PixelyLbl.grid(row=3, column=2)
 
         self.varStarMagTxt = tk.Label(
@@ -217,12 +217,12 @@ class VariableStarsApp(tk.Frame):
     def evaluateRelativeLuminance(self):
         # https://en.wikipedia.org/wiki/Relative_luminance
         pix = self.pilImg.load()
-        self.star1.pixelRBG = pix[int(self.star1.x.get()), int(self.star1.y.get())]
+        self.star1.pixelRBG = pix[int(self.star1.xPick.get()), int(self.star1.yPick.get())]
         star1RelLum = self.star1.getRelativeLuminance()
-        self.star2.pixelRBG = pix[int(self.star2.x.get()), int(self.star2.y.get())]
+        self.star2.pixelRBG = pix[int(self.star2.xPick.get()), int(self.star2.yPick.get())]
         star2RelLum = self.star2.getRelativeLuminance()
         self.varStar.pixelRBG = pix[
-            int(self.varStar.x.get()), int(self.varStar.y.get())
+            int(self.varStar.xPick.get()), int(self.varStar.yPick.get())
         ]
         varStarRelLum = self.varStar.getRelativeLuminance()
 
