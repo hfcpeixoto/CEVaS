@@ -52,7 +52,7 @@ class VariableStarsApp(tk.Frame):
 
         star.evalStarBBox(self.img_gray_array)
 
-        self.img_gray.crop((star.xMin,star.yMin,star.xMax,star.yMax)).show()
+        # self.img_gray.crop((star.xMin,star.yMin,star.xMax,star.yMax)).show()
 
         # Mapping click position from full image to resized
         x = int(int(star.xPick.get()) * self.resizedImg.width() / self.pilImg.width)
