@@ -1,6 +1,11 @@
 from CEVaS import CEAAL
 import tkinter as tk
-from PIL import Image, ImageTk
+from tkinter import filedialog
+from PIL import Image, ImageTk, ImageOps
+from math import sqrt
+import numpy as np
+
+
 
 
 class VariableStarsApp(tk.Frame):
