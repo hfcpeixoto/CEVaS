@@ -251,6 +251,9 @@ class VariableStarsApp(tk.Frame):
             )
         )
         self.img = ImageTk.PhotoImage(self.pilImg)
+        self.img_gray = ImageOps.grayscale(self.pilImg)
+        self.img_gray = self.img_gray.point(threshold_star_img)
+        self.img_gray_array = np.transpose(np.asarray(self.img_gray))
 
         self.initSelectedImage()
 
