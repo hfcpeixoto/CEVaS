@@ -1,15 +1,20 @@
 from CEVaS import CEAAL
 import tkinter as tk
-from tkinter import filedialog
+from tkinter import filedialog, Menu
 from PIL import Image, ImageTk, ImageOps
 from math import sqrt
 import numpy as np
+import webbrowser
 
 
 def threshold_star_img(pixel):
     # Grayscale thresold set to 50
     threshold = 50
     return pixel if pixel > threshold else 0
+
+
+def linkCallback(url):
+    webbrowser.open_new(url)
 
 
 class VariableStarsApp(tk.Frame):
@@ -123,8 +128,69 @@ class VariableStarsApp(tk.Frame):
             self.canvas1.focus_set()
             self.canvas1.pack(side=tk.LEFT, expand=True, fill=tk.BOTH)
 
+
+    def openAboutWindow(self):
+        aboutFrame = tk.Toplevel(self)
+        aboutFrame.title('About CEVaS')
+
+        logoCEAAL = ImageTk.PhotoImage(Image.open('./logo_ceaal_transp.png'))
+        tk.Label(
+                aboutFrame, 
+                image=logoCEAAL,
+                height=logoCEAAL.height()
+                ).grid(column=0, rowspan = 9, padx=5, pady=5)
+
+        tk.Label(
+                aboutFrame,
+                text='CEVaS',
+                font=("Times", 16)
+                ).grid(row = 0, column=1,sticky = 'W')
+        tk.Message(
+                    aboutFrame,
+                    text='CEVas (CEAAL Variable Stars) is a tool to help amateur astronomers measure the magnitude of variable stars.',
+                    width=logoCEAAL.width()
+                ).grid(row=1, column=1, rowspan=4)
+
+        tk.Label(
+                aboutFrame,
+                text='Developed by:'
+                ).grid(row = 5, column=1,sticky = 'W')
+        link1 = tk.Label(
+                        aboutFrame,
+                        text='Hélvio Peixoto', 
+                        cursor="hand2", 
+                        fg="blue"
+                        )
+        link1.grid(row = 6, column=1,sticky = 'W')
+        link1.bind("<Button-1>", lambda e: linkCallback("http://www.linkedin.com/in/hfcpeixoto"))
+        link2 = tk.Label(
+                        aboutFrame,
+                        text='CEAAL', 
+                        cursor="hand2", 
+                        fg="blue"
+                        )
+        link2.grid(row = 7, column=1,sticky = 'W')
+        link2.bind("<Button-1>", lambda e: linkCallback("http://www.ceaal.org.br"))
+        link3 = tk.Label(
+                        aboutFrame,
+                        text='GitHub', 
+                        cursor="hand2", 
+                        fg="blue"
+                        )
+        link3.grid(row = 8, column=1,sticky = 'W')
+        link3.bind("<Button-1>", lambda e: linkCallback("www.github.com/hfcpeixoto/CEVaS"))
+
+        aboutFrame.pack()
+
+        return
+
+
     def initApp(self):
-        self.tableFrame = tk.Frame(self)
+        menubar = Menu(self.parent)
+        menubar.add_command(label="About", command = self.openAboutWindow)
+        self.parent.config(menu=menubar)
+
+        self.tableFrame = tk.LabelFrame(self)
         self.tableFrame.pack(side=tk.TOP, anchor=tk.NW)
 
         starsHeaderLbl = tk.Label(self.tableFrame, text="Stars")
@@ -285,7 +351,7 @@ class VariableStarsApp(tk.Frame):
 
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
-        parent.title("Variable star's magnitude evaluator")
+        parent.title("CEVaS (CEAAL Variable Stars)")
         self.parent = parent
         self.selectedImageFrame = ""
 
