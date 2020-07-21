@@ -234,9 +234,7 @@ class VariableStarsApp(tk.Frame):
 
     def evaluateRelativeLuminance(self):
         star1RelLum   = self.star1.getAverageRelativeLuminance()
-        print(star1RelLum)
         star2RelLum   = self.star2.getAverageRelativeLuminance()
-        print(star2RelLum)
         varStarRelLum = self.varStar.getAverageRelativeLuminance()
 
         star1Mag = float(self.star1MagTxt.get())
