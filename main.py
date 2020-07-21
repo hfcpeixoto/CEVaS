@@ -52,7 +52,8 @@ class VariableStarsApp(tk.Frame):
 
         star.evalStarBBox(self.img_gray_array)
 
-        # self.img_gray.crop((star.xMin,star.yMin,star.xMax,star.yMax)).show()
+        star.croppedImage = ImageTk.PhotoImage(self.pilImg.crop((star.xMin,star.yMin,star.xMax,star.yMax)))
+        star.croppedImageLbl.configure(image=star.croppedImage)
 
         # Mapping click position from full image to resized
         x = int(int(star.xPick.get()) * self.resizedImg.width() / self.pilImg.width)
@@ -141,6 +142,9 @@ class VariableStarsApp(tk.Frame):
         starsHeaderLbl = tk.Label(self.tableFrame, text="Pick from image")
         starsHeaderLbl.grid(row=0, column=4)
 
+        pickedStarsHeaderLbl = tk.Label(self.tableFrame, text="Picked star")
+        pickedStarsHeaderLbl.grid(row=0, column=5)
+
         # Comparison star 1
         star1Lbl = tk.Label(self.tableFrame, text="Comp star 1")
         star1Lbl.grid(row=1, column=0)
@@ -160,6 +164,9 @@ class VariableStarsApp(tk.Frame):
         )
         selectStar1Btn.grid(row=1, column=4)
 
+        self.star1.croppedImageLbl = tk.Label(self.tableFrame)
+        self.star1.croppedImageLbl.grid(row=1, column=5)
+
         # Comparison star 2
         star2Lbl = tk.Label(self.tableFrame, text="Comp star 2")
         star2Lbl.grid(row=2, column=0)
@@ -178,6 +185,9 @@ class VariableStarsApp(tk.Frame):
             self.tableFrame, text="Pick", command=lambda: self.initStarImage(self.star2)
         )
         selectStar2Btn.grid(row=2, column=4)
+
+        self.star2.croppedImageLbl = tk.Label(self.tableFrame)
+        self.star2.croppedImageLbl.grid(row=2, column=5)
 
         # Variable star
         varStarLbl = tk.Label(self.tableFrame, text="Variable star")
@@ -201,6 +211,9 @@ class VariableStarsApp(tk.Frame):
         )
         selectVarStarBtn.grid(row=3, column=4)
 
+        self.varStar.croppedImageLbl = tk.Label(self.tableFrame)
+        self.varStar.croppedImageLbl.grid(row=3, column=5)
+
         # Select image button
         selectImageBtn = tk.Button(
             self.tableFrame,
@@ -209,7 +222,7 @@ class VariableStarsApp(tk.Frame):
             height=2,
             command=self.selectImage,
         )
-        selectImageBtn.grid(row=0, column=5, rowspan=3)
+        selectImageBtn.grid(row=0, column=6, rowspan=3)
 
         # Evaluate magnitude button
         evalMagnitudeBtn = tk.Button(
@@ -219,13 +232,13 @@ class VariableStarsApp(tk.Frame):
             height=2,
             command=self.evaluateMagnitude,
         )
-        evalMagnitudeBtn.grid(row=3, column=5, rowspan=2)
+        evalMagnitudeBtn.grid(row=3, column=6, rowspan=2)
 
         # Selected image status
         statusSelectedImageLbl = tk.Label(
             self.tableFrame, anchor=tk.W, justify=tk.LEFT, textvariable=self.filename
         )
-        statusSelectedImageLbl.grid(row=4, column=0, columnspan=4)
+        statusSelectedImageLbl.grid(row=4, column=0, columnspan=6)
 
 
     def evaluateMagnitude(self):
