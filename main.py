@@ -6,6 +6,10 @@ from math import sqrt
 import numpy as np
 
 
+def threshold_star_img(pixel):
+    # Grayscale thresold set to 50
+    threshold = 50
+    return pixel if pixel > threshold else 0
 
 
 class VariableStarsApp(tk.Frame):
@@ -46,7 +50,11 @@ class VariableStarsApp(tk.Frame):
         self.top.destroy()
         self.top.update()
 
-        # Mapping click poosition from full image to resized
+        star.evalStarBBox(self.img_gray_array)
+
+        self.img_gray.crop((star.xMin,star.yMin,star.xMax,star.yMax)).show()
+
+        # Mapping click position from full image to resized
         x = int(int(star.xPick.get()) * self.resizedImg.width() / self.pilImg.width)
         y = int(int(star.yPick.get()) * self.resizedImg.height() / self.pilImg.height)
 
@@ -203,13 +211,13 @@ class VariableStarsApp(tk.Frame):
         )
         selectImageBtn.grid(row=0, column=5, rowspan=3)
 
-        # Select image button
+        # Evaluate magnitude button
         evalMagnitudeBtn = tk.Button(
             self.tableFrame,
             text="Evaluate",
             width=10,
             height=2,
-            command=self.evaluateRelativeLuminance,
+            command=self.evaluateMagnitude,
         )
         evalMagnitudeBtn.grid(row=3, column=5, rowspan=2)
 
@@ -219,17 +227,17 @@ class VariableStarsApp(tk.Frame):
         )
         statusSelectedImageLbl.grid(row=4, column=0, columnspan=4)
 
+
+    def evaluateMagnitude(self):
+        self.evaluateRelativeLuminance()
+
+
     def evaluateRelativeLuminance(self):
-        # https://en.wikipedia.org/wiki/Relative_luminance
-        pix = self.pilImg.load()
-        self.star1.pixelRBG = pix[int(self.star1.xPick.get()), int(self.star1.yPick.get())]
-        star1RelLum = self.star1.getRelativeLuminance()
-        self.star2.pixelRBG = pix[int(self.star2.xPick.get()), int(self.star2.yPick.get())]
-        star2RelLum = self.star2.getRelativeLuminance()
-        self.varStar.pixelRBG = pix[
-            int(self.varStar.xPick.get()), int(self.varStar.yPick.get())
-        ]
-        varStarRelLum = self.varStar.getRelativeLuminance()
+        star1RelLum   = self.star1.getAverageRelativeLuminance()
+        print(star1RelLum)
+        star2RelLum   = self.star2.getAverageRelativeLuminance()
+        print(star2RelLum)
+        varStarRelLum = self.varStar.getAverageRelativeLuminance()
 
         star1Mag = float(self.star1MagTxt.get())
         star2Mag = float(self.star2MagTxt.get())
