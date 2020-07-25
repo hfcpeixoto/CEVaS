@@ -2,7 +2,6 @@ from CEVaS import CEAAL
 import tkinter as tk
 from tkinter import filedialog, Menu
 from PIL import Image, ImageTk, ImageOps
-from math import sqrt
 import numpy as np
 import webbrowser
 
