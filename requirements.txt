@@ -1,2 +1,3 @@
-Pillow>=7.0.0
-numpy>=20.0.2
+Pillow
+numpy
+PySide6
