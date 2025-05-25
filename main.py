@@ -254,19 +254,63 @@ class VariableStarsApp(QMainWindow):
             try:
                 self.filename = fileName
                 self.pilImg = Image.open(self.filename)
+
+                # Specifically handle TIFF images: convert to a known safe mode first.
+                # RGBA is a good general purpose mode.
+                if self.pilImg.format == 'TIFF':
+                    try:
+                        self.pilImg = self.pilImg.convert('RGBA')
+                    except Exception as tiff_convert_error:
+                        # If TIFF conversion itself fails, show a more specific error.
+                        QMessageBox.critical(self, "TIFF Conversion Error", 
+                                             f"Could not convert TIFF file: {fileName}\n"
+                                             f"Pillow format: {self.pilImg.format}, mode: {self.pilImg.mode}\n"
+                                             f"Error: {tiff_convert_error}")
+                        # Reset and return
+                        self.filename = "No image selected."
+                        self.pilImg = None
+                        self.statusBar.showMessage(self.filename)
+                        self._displayImageInMainView(None)
+                        return
                 
                 # Convert PIL image to QImage then to QPixmap
                 # Ensure correct format handling, especially for various image modes (L, RGB, RGBA)
+                # The self.pilImg here might be the TIFF converted to RGBA
                 if self.pilImg.mode == "RGBA":
-                    image_data = self.pilImg.convert("RGBA").tobytes("raw", "BGRA")
-                    qImage = QImage(image_data, self.pilImg.width, self.pilImg.height, QImage.Format_ARGB32)
+                    # Already in RGBA, or converted TIFF to RGBA
+                    image_data = self.pilImg.tobytes("raw", "BGRA") # Pillow RGBA is just RGB A, QImage wants BGRA
+                    qImage = QImage(image_data, self.pilImg.width, self.pilImg.height, QImage.Format_ARGB32_Premultiplied) # Or Format_ARGB32
                 elif self.pilImg.mode == "RGB":
-                    image_data = self.pilImg.convert("RGB").tobytes("raw", "BGR")
+                    image_data = self.pilImg.tobytes("raw", "BGR") # Pillow RGB to QImage BGR
                     qImage = QImage(image_data, self.pilImg.width, self.pilImg.height, QImage.Format_RGB888)
-                else: # Grayscale or other, convert to RGB for consistency for QPixmap
+                elif self.pilImg.mode == "L": # Grayscale
+                    # Convert L mode (grayscale) to RGB888 for QPixmap display
                     self.pilImg = self.pilImg.convert("RGB")
                     image_data = self.pilImg.tobytes("raw", "BGR")
                     qImage = QImage(image_data, self.pilImg.width, self.pilImg.height, QImage.Format_RGB888)
+                elif self.pilImg.mode == "P": # Palette mode
+                     # Convert P mode (palette) to RGBA for QPixmap display
+                    self.pilImg = self.pilImg.convert("RGBA")
+                    image_data = self.pilImg.tobytes("raw", "BGRA")
+                    qImage = QImage(image_data, self.pilImg.width, self.pilImg.height, QImage.Format_ARGB32_Premultiplied)
+                else: 
+                    # For other modes (e.g. CMYK, YCbCr, some specific TIFF modes not caught by TIFF check)
+                    # attempt a general conversion to RGBA as a fallback.
+                    try:
+                        print(f"Warning: Image {fileName} in unhandled mode {self.pilImg.mode}. Attempting RGBA conversion.")
+                        self.pilImg = self.pilImg.convert("RGBA")
+                        image_data = self.pilImg.tobytes("raw", "BGRA")
+                        qImage = QImage(image_data, self.pilImg.width, self.pilImg.height, QImage.Format_ARGB32_Premultiplied)
+                    except Exception as conversion_error:
+                         QMessageBox.critical(self, "Image Conversion Error", 
+                                             f"Could not convert image: {fileName} (mode: {self.pilImg.mode})\nError: {conversion_error}")
+                         # Reset and return
+                         self.filename = "No image selected."
+                         self.pilImg = None
+                         self.statusBar.showMessage(self.filename)
+                         self._displayImageInMainView(None)
+                         return
+
 
                 self.baseQtImg = QPixmap.fromImage(qImage)
                 self.qtImg = self.baseQtImg.copy() # qtImg will have crosshairs, baseQtImg is clean
