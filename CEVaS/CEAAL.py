@@ -1,16 +1,12 @@
-from tkinter import StringVar
 import numpy as np
 
 
 class Star:
     def __init__(self, colour=(0, 0, 0)):
         self.imageCross = list()
-        self.xPick = StringVar()
-        self.xPick.set("0")
-        self.yPick = StringVar()
-        self.yPick.set("0")
-        self.magnitude = StringVar()
-        self.magnitude.set("0")
+        self.xPick = "0"
+        self.yPick = "0"
+        self.magnitude = "0"
         self.colour = colour
         self.pixelRBG = list()
         self.xMin = None
@@ -38,8 +34,8 @@ class Star:
 
 
     def evalStarBBox(self, img_array):
-        xp = int(self.xPick.get())
-        yp = int(self.yPick.get())
+        xp = int(self.xPick)
+        yp = int(self.yPick)
 
         xMin = xp
         xMax = xp
